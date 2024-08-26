@@ -40,6 +40,8 @@ Install the plugin with your preferred package manager:
   },
 ```
 
+This gives you access to the `DockerComposeLogs` command
+
 ## ⚙️ Configuration
 
 ### Setup
