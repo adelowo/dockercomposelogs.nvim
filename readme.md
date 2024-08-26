@@ -28,12 +28,16 @@ Install the plugin with your preferred package manager:
 ### [lazy.nvim](https://github.com/folke/lazy.nvim)
 
 ```lua
-{
-  "adelowo/dockercomposelogs.nvim",
-  config = function()
-    require("dockercomposelogs").setup({})
-  end,
-}
+  {
+    "adelowo/dockercomposelogs.nvim",
+    config = function()
+      require("dockercomposelogs").setup({})
+    end,
+    event = "VeryLazy",
+    dependencies = {
+      "nvim-telescope/telescope.nvim",
+    },
+  },
 ```
 
 ## ⚙️ Configuration
