@@ -14,14 +14,14 @@ M.show_docker_logs = function(opts)
 		.new(opts, {
 			finder = finders.new_async_job({
 				command_generator = function()
-					return { "docker", "compose", "ps", "--format", "json" }
+					return { "docker", "compose", "ps", "--format", "json", "--services" }
 				end,
 				entry_maker = function(entry)
-					local parsed = vim.json.decode(entry)
+					local parsed = entry
 					if parsed then
 						return {
-							display = parsed.Image,
-							ordinal = parsed.Image,
+							display = parsed,
+							ordinal = parsed,
 							value = parsed,
 						}
 					end
@@ -31,6 +31,15 @@ M.show_docker_logs = function(opts)
 			previewer = previewers.new_buffer_previewer({
 				title = "Docker Image logs",
 				define_preview = function(self, entry)
+					local cmd = string.format("docker compose logs %s", entry.value)
+					local handle = io.popen(cmd)
+					if not handle then
+						vim.api.nvim_err_writeln("Error: Could not fetch your logs")
+						return
+					end
+
+					local logs = handle:read("*a")
+					handle:close()
 					vim.api.nvim_buf_set_lines(
 						self.state.bufnr,
 						0,
@@ -39,10 +48,11 @@ M.show_docker_logs = function(opts)
 						vim.tbl_flatten({
 							"",
 							"```lua",
-							vim.split(vim.inspect(entry.value.Command), "\n"),
+							vim.split(logs, "\n"),
 							"```",
 						})
 					)
+
 					utils.highlighter(self.state.bufnr, "markdown")
 				end,
 			}),
