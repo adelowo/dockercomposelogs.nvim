@@ -3,7 +3,7 @@
 A Telescope extension for viewing logs from your docker compose containers
 running in the current working directory.
 
-![plugin view](https://gist.github.com/user-attachments/assets/a9069fb3-faa2-428b-aacc-ffb33a92ca96)
+![plugin view](./assets/dockercomposelogs.jpeg)
 
 ## ✨ Features
 
