@@ -27,9 +27,8 @@ local defaults = {
 	logs_since = 10, -- how far in the logs do you want to go? This is in minutes. Must be a valid number. 2 to 60 accepted
 }
 
-M.show_dockercompose_logs = function(opts)
-	opts = vim.tbl_deep_extend("force", defaults, opts or {})
-
+---@param opts dockercomposelogs.Config
+local show_dockercompose_logs = function(opts)
 	-- Now you can use opts.no_log_prefix, opts.show_timestamps, etc.
 	-- They will have the default values if not specified in the input opts
 
@@ -108,6 +107,13 @@ M.show_dockercompose_logs = function(opts)
 			}),
 		})
 		:find()
+end
+
+---@param opts? dockercomposelogs.Config
+M.setup = function(opts)
+	vim.api.nvim_create_user_command("DockerComposeLogs", function()
+		show_dockercompose_logs(vim.tbl_deep_extend("force", defaults, opts or {}))
+	end, {})
 end
 
 return M
